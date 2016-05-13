@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="ue03 automatic builds with ANT">
+	
+	<target name="clean">
+		<!--
+		delete all artefacts (files and directories) you create during this build
+		-->
+	</target>
+
+	<target name="prepare" depends="clean">
+			<!--
+			create every directory you need
+			-->
+	</target>
+
+	
+	<target name="compile" >
+		<!--
+		 mind the dependency of each target
+		 is it depoendend on another target?
+		 -->
+		<mkdir dir="${target.classes}" />
+		
+		<!--
+		 also compile the test code
+		 put the test classes into a build/junit directory
+		 keep in mind to include the target.classes and the junit lib into classpath
+		-->
+	
+	</target>
+
+	<target name="jar" depends="compile">
+		<!--
+		 check what is needed to create a JAR-Archive 
+		-->
+	</target>
+
+	<target name="run" depends="jar">
+		<echo message="Trying to run the application!" />
+		<!--
+		 run the Java program within your jar-archive
+		 log its output to output.txt
+		 -->
+	</target>
+</project>

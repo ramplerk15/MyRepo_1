@@ -18,7 +18,10 @@ public class HelloWorldTest {
 	
 	@Test
 	public void testConstructor(){
-		fail("Not yet implemented!");
+		String test1 = "Lemonhead";
+		String test2 = " ";
+		String test3 = "Helmet";
+		String test4 = null;
 	}
 	
 	@Test

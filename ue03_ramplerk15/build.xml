@@ -1,75 +1,61 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="ue03 automatic builds with ANT">
 
-	<!-- Properties -->
+<!-- Properties -->
 	<property name="src" value="${source}/src" />
-
-	       <property name="target" value="${source}/build" />
-
-	       <property name="target.classes" value="${target}/classes" />
-
-	       <property name="target.jar" value="${target}/jar" />
-
-	       <property name="target.junit" value="${target}/junit" />
-
-	       <property name="test" value="test" />
-
-	       <property name="libs" value="libs" />
+	<property name="target" value="${source}/build" />
+    <property name="target.classes" value="${target}/classes" />
+    <property name="target.jar" value="${target}/jar" />
+    <property name="target.junit" value="${target}/junit" />
+    <property name="test" value="test" />
+    <property name="libs" value="libs" /> 
 	
 	<target name="clean">
-		<!--
-		delete all artefacts (files and directories) you create during this build
-		-->
-		<delete dir = "${target}" />
-		
+<!-- delete all artefacts (files and directories) you create during this build -->
+		<delete includeemptydirs="true" quiet="true">
+			<fileset dir="${target}" />
+		</delete>
+		<!-- delete dir = "${target}" /-->
 	</target>
 
 	<target name="prepare" depends="clean">
-			<!--
-			create every directory you need
-			-->
-		
+<!-- create every directory you need -->
+		<mkdir dir="build"/>
+		<mkdir dir="src"/>
 		<mkdir dir ="build/classes" />
 		<mkdir dir = "build/jar"  />
 		<mkdir dir = "build/junit" />
  	</target>
 
 	<target name="compile" >
-		<!--
-		 mind the dependency of each target
-		 is it dependend on another target?
-		 -->
+<!-- mind the dependency of each target - is it dependend on another target? -->
 		<javac srcdir="src" destdir ="build/classes" includeantruntime="true"/>
 		
-		<!--
+<!--
 		 also compile the test code
 		 put the test classes into a build/junit directory
 		 keep in mind to include the target.classes and the junit lib into classpath
-		-->
-		
-	</target>
+	-->
+	<!-- <javac srcdir="${basedir}/test" destdir="${target.junit}" includeantruntime="true"/> -->
+</target>
 
 	<target name="jar" depends="compile">
-		<!--
-		 check what is needed to create a JAR-Archive 
-		-->
+<!-- check what is needed to create a JAR-Archive -->
 		<jar jarFile="${target.jar}/HelloWorld.jar" >
-		<fileset dir="${target.classes}" />
-			 <manifest>
+			<fileset dir="${target.classes}" />
+				 <manifest>
 				   <attribute name="Main-Class" value="at.fhj.swd.konfmana.HelloWorldMain" />
-			</manifest>
-
-	 	</jar>
+				</manifest>
+		</jar>
 	</target>
 
 	<target name="run" depends="jar">
 		<echo message="Trying to run the application!" />
-		<!--
-		 run the Java program within your jar-archive
+<!-- run the Java program within your jar-archive
 		 log its output to output.txt
-		 -->
-		<java classpath = "${target}/classes"
-		classname = "at.fhj.swd.konfmana.HelloWorldMain"
-		fork = "true" />
+ -->
+		
+ <java jar="${target.jar}/HelloWorld.jar" fork="true" output="${target}/output.txt"/>
+		
 	</target>
 </project>

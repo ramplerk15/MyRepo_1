@@ -18,20 +18,30 @@ public class HelloWorldTest {
 	
 	@Test
 	public void testConstructor(){
-		
-		
+		hw = new HelloWorld("test");
+        assertNotNull(hw);
+
 	}
 	
 	@Test
 	public void testGetName() {
-		
+		 hw = new HelloWorld();
+         assertNull(hw.getName());
+
+         hw = new HelloWorld("Lucky Luke");
+         assertEquals(hw.getName(), "Lucky Luke");
+         hw = new HelloWorld(null);
+         assertEquals(hw.getName(), null);
 	}
 
 	@Test
 	public void testSetName() {
-		
-	}
+		hw = new HelloWorld("test");
+        assertEquals(hw.getName(), "test");
+        hw.setName("King Kong");
 
+        assertEquals(hw.getName(), "King Kong");
+	}
 
 	public void testToString() {
 		assertEquals("Hello World!", hw.toString());

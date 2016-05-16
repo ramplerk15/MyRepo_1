@@ -12,19 +12,18 @@
 			<!--
 			create every directory you need
 			-->
-		
+		<mkdir dir="build"/>
+		<mkdir dir ="src"/>
 		<mkdir dir ="build/classes" />
-		
 		<mkdir dir = "build/jar"  />
 	</target>
 
-	
 	<target name="compile" >
 		<!--
 		 mind the dependency of each target
-		 is it depoendend on another target?
+		 is it dependend on another target?
 		 -->
-		<mkdir dir="${target.classes}" />
+		<javac srcdir="src" destdir ="build/classes" includeantruntime="true"/>
 		
 		<!--
 		 also compile the test code
@@ -38,6 +37,9 @@
 		<!--
 		 check what is needed to create a JAR-Archive 
 		-->
+		<fileset dir = "${target}/build/jar/HelloWorld.jar" basedir ="${target}/build/jar/classes"/>
+
+
 	</target>
 
 	<target name="run" depends="jar">
@@ -46,7 +48,7 @@
 		 run the Java program within your jar-archive
 		 log its output to output.txt
 		 -->
-		<java classpath = "${target.junit}"
+		<java classpath = "${target}/classes"
 		classname = "at.fhj.swd.konfmana.HelloWorldMain"
 		fork = "true" />
 	</target>

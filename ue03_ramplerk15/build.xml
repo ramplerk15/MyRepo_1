@@ -53,19 +53,13 @@
 		<!--
 		 check what is needed to create a JAR-Archive 
 		-->
-		<jar destfile="${target.jar}/HelloWorld.jar" >
+		<jar jarFile="${target.jar}/HelloWorld.jar" >
+		<fileset dir="${target.classes}" />
+			 <manifest>
+				   <attribute name="Main-Class" value="at.fhj.swd.konfmana.HelloWorldMain" />
+			</manifest>
 
-		                <fileset dir="${target.classes}" />
-
-		                     <manifest>
-
-		                           <attribute name="Main-Class" value="at.fhj.swd.konfmana.HelloWorldMain" />
-
-		                     </manifest>
-
-		                     </jar>
-
-
+	 	</jar>
 	</target>
 
 	<target name="run" depends="jar">

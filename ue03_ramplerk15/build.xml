@@ -5,12 +5,17 @@
 		<!--
 		delete all artefacts (files and directories) you create during this build
 		-->
+		<delete dir = "${target}" />
 	</target>
 
 	<target name="prepare" depends="clean">
 			<!--
 			create every directory you need
 			-->
+		
+		<mkdir dir ="build/classes" />
+		
+		<mkdir dir = "build/jar"  />
 	</target>
 
 	
@@ -41,5 +46,8 @@
 		 run the Java program within your jar-archive
 		 log its output to output.txt
 		 -->
+		<java classpath = "${target.junit}"
+		classname = "at.fhj.swd.konfmana.HelloWorldMain"
+		fork = "true" />
 	</target>
 </project>

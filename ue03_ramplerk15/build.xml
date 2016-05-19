@@ -10,27 +10,29 @@
     <property name="test" value="test" />
     <property name="libs" value="libs" /> 
 	
+	
+	
 	<target name="clean">
 <!-- delete all artefacts (files and directories) you create during this build -->
+	<echo message ="Deleting..." />
 		<delete includeemptydirs="true" quiet="true">
-			<fileset dir="${target}" />
-		</delete>
-		<!-- delete dir = "${target}" /-->
+				<fileset dir="${target}" />
+			</delete>
 	</target>
 
 	<target name="prepare" depends="clean">
 <!-- create every directory you need -->
-		<mkdir dir="build"/>
-		<mkdir dir="src"/>
-		<mkdir dir ="build/classes" />
-		<mkdir dir = "build/jar"  />
-		<mkdir dir = "build/junit" />
+		<echo message ="Preparing..." />
+		<mkdir dir ="${target.classes}" />
+		<mkdir dir = "${target.jar}"  />
+		<mkdir dir = "${target.junit}" />
  	</target>
 
 	<target name="compile" >
 <!-- mind the dependency of each target - is it dependend on another target? -->
+		<echo message ="Compiling..." />
 		<javac srcdir="src"
-			destdir ="build/classes"
+			destdir ="${target.classes}"
 			includeantruntime="false"/>
 		
 <!--
@@ -38,13 +40,22 @@
 		 put the test classes into a build/junit directory
 		 keep in mind to include the target.classes and the junit lib into classpath
 	-->
-<!--	 <javac srcdir="${basedir}/test"
+		<echo message ="Compiling test..." />
+		<path id="path.test">
+			 <pathelement location="libs/junit-4.11.jar" />
+			<pathelement location="$libs/org.hamcrest.core_1.3.0.v201303031735.jar" />
+			<pathelement location="${target.classes}" />
+						</path>
+	 <javac srcdir="${test}"
 	 	destdir="${target.junit}"
-		 includeantruntime="false"/> -->
+		 includeantruntime="false">
+		<classpath refid ="path.test" />
+	 	</javac>
 </target>
 
 <target name="jar" depends="compile">
 <!-- check what is needed to create a JAR-Archive -->
+	<echo message ="Creating jar..." />
 		<jar jarFile="${target.jar}/HelloWorld.jar" >
 			<fileset dir="${target.classes}" />
 				 <manifest>
@@ -57,7 +68,7 @@
 <!-- run the Java program within your jar-archive
 		 log its output to output.txt
  -->
-		
+	<echo message="Trying to run the application!" />
  	<java jar="${target.jar}/HelloWorld.jar" fork="true" output="${target}/output.txt"/>
 	</target>
 </project>

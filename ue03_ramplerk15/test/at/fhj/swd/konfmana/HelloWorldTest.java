@@ -1,9 +1,11 @@
 package at.fhj.swd.konfmana;
 
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+
 
 import at.fhj.swd.konfmana.HelloWorld;
 
@@ -18,29 +20,40 @@ public class HelloWorldTest {
 	
 	@Test
 	public void testConstructor(){
-		hw = new HelloWorld("test");
-        assertNotNull(hw);
-
+		try {
+			hw = new HelloWorld("Lucky Luke");
+			assertNotNull(hw);
+		}
+		catch (AssertionError e) {
+				fail("testConstructor failed...");
+		}
 	}
 	
 	@Test
 	public void testGetName() {
-		 hw = new HelloWorld();
-         assertNull(hw.getName());
-
-         hw = new HelloWorld("Lucky Luke");
-         assertEquals(hw.getName(), "Lucky Luke");
-         hw = new HelloWorld(null);
-         assertEquals(hw.getName(), null);
+		try {
+			hw = new HelloWorld();
+			assertNull(hw.getName());
+			hw = new HelloWorld("King Kong");
+			assertNotNull(hw.getName());
+			assertEquals(hw.getName(), "King Kong");
+		}
+		catch (AssertionError e) {
+				fail("testGetName failed...");
+		}
 	}
 
 	@Test
 	public void testSetName() {
-		hw = new HelloWorld("test");
-        assertEquals(hw.getName(), "test");
-        hw.setName("King Kong");
-
-        assertEquals(hw.getName(), "King Kong");
+		try {
+			hw = new HelloWorld("Minnie Mouse");
+			assertEquals(hw.getName(), "Minnie Mouse");
+			hw.setName("Peter Pan");
+			assertEquals(hw.getName(), "Peter Pan");
+		}
+		catch (AssertionError e) {
+			fail("testSetName failed...");
+		}
 	}
 
 	public void testToString() {

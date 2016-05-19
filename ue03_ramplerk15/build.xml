@@ -10,8 +10,6 @@
     <property name="test" value="test" />
     <property name="libs" value="libs" /> 
 	
-	
-	
 	<target name="clean">
 <!-- delete all artefacts (files and directories) you create during this build -->
 	<echo message ="Deleting..." />

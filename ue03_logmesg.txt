@@ -1,0 +1,1017 @@
+commit f01cc1fba5a45d7ad8e1cce74d064978e7bf92d6
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Thu May 19 20:56:30 2016 +0200
+
+    .
+
+diff --git a/ue03_ramplerk15/build.xml b/ue03_ramplerk15/build.xml
+index 9ed8180..1d1f9cd 100644
+--- a/ue03_ramplerk15/build.xml
++++ b/ue03_ramplerk15/build.xml
+@@ -10,8 +10,6 @@
+     <property name="test" value="test" />
+     <property name="libs" value="libs" /> 
+ 	
+-	
+-	
+ 	<target name="clean">
+ <!-- delete all artefacts (files and directories) you create during this build -->
+ 	<echo message ="Deleting..." />
+
+commit 493985b9782144be5220f807ef1f1a6e54f277e8
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Thu May 19 20:34:40 2016 +0200
+
+    fertig 1.0
+
+diff --git a/ue03_ramplerk15/${target.jar}/HelloWorld.jar b/ue03_ramplerk15/${target.jar}/HelloWorld.jar
+deleted file mode 100644
+index cfe1f48..0000000
+Binary files a/ue03_ramplerk15/${target.jar}/HelloWorld.jar and /dev/null differ
+diff --git a/ue03_ramplerk15/build.xml b/ue03_ramplerk15/build.xml
+index 60f5ffe..9ed8180 100644
+--- a/ue03_ramplerk15/build.xml
++++ b/ue03_ramplerk15/build.xml
+@@ -2,8 +2,8 @@
+ <project name="ue03 automatic builds with ANT">
+ 
+ <!-- Properties -->
+-	<property name="src" value="${source}/src" />
+-	<property name="target" value="${source}/build" />
++	<property name="src" value="src" />
++	<property name="target" value="build" />
+     <property name="target.classes" value="${target}/classes" />
+     <property name="target.jar" value="${target}/jar" />
+     <property name="target.junit" value="${target}/junit" />
+@@ -31,7 +31,7 @@
+ 	<target name="compile" >
+ <!-- mind the dependency of each target - is it dependend on another target? -->
+ 		<echo message ="Compiling..." />
+-		<javac srcdir="src"
++		<javac srcdir="${src}"
+ 			destdir ="${target.classes}"
+ 			includeantruntime="false"/>
+ 		
+@@ -50,7 +50,7 @@
+ 	 	destdir="${target.junit}"
+ 		 includeantruntime="false">
+ 		<classpath refid ="path.test" />
+-	 	</javac>
++	 </javac>
+ </target>
+ 
+ <target name="jar" depends="compile">
+@@ -58,9 +58,9 @@
+ 	<echo message ="Creating jar..." />
+ 		<jar jarFile="${target.jar}/HelloWorld.jar" >
+ 			<fileset dir="${target.classes}" />
+-				 <manifest>
+-				   <attribute name="Main-Class" value="at.fhj.swd.konfmana.HelloWorldMain" />
+-				</manifest>
++			 <manifest>
++				  <attribute name="Main-Class" value="at.fhj.swd.konfmana.HelloWorldMain" />
++			</manifest>
+ 		</jar>
+ </target>
+ 
+
+commit 8247f99e2ce51c864fcf70dbf63e5e6a6da39d1f
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Thu May 19 20:23:09 2016 +0200
+
+    fertig...
+
+diff --git a/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class
+index 108cdcd..239d342 100644
+Binary files a/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class and b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class differ
+diff --git a/ue03_ramplerk15/build.xml b/ue03_ramplerk15/build.xml
+index 2986ca2..60f5ffe 100644
+--- a/ue03_ramplerk15/build.xml
++++ b/ue03_ramplerk15/build.xml
+@@ -10,27 +10,29 @@
+     <property name="test" value="test" />
+     <property name="libs" value="libs" /> 
+ 	
++	
++	
+ 	<target name="clean">
+ <!-- delete all artefacts (files and directories) you create during this build -->
++	<echo message ="Deleting..." />
+ 		<delete includeemptydirs="true" quiet="true">
+-			<fileset dir="${target}" />
+-		</delete>
+-		<!-- delete dir = "${target}" /-->
++				<fileset dir="${target}" />
++			</delete>
+ 	</target>
+ 
+ 	<target name="prepare" depends="clean">
+ <!-- create every directory you need -->
+-		<mkdir dir="build"/>
+-		<mkdir dir="src"/>
+-		<mkdir dir ="build/classes" />
+-		<mkdir dir = "build/jar"  />
+-		<mkdir dir = "build/junit" />
++		<echo message ="Preparing..." />
++		<mkdir dir ="${target.classes}" />
++		<mkdir dir = "${target.jar}"  />
++		<mkdir dir = "${target.junit}" />
+  	</target>
+ 
+ 	<target name="compile" >
+ <!-- mind the dependency of each target - is it dependend on another target? -->
++		<echo message ="Compiling..." />
+ 		<javac srcdir="src"
+-			destdir ="build/classes"
++			destdir ="${target.classes}"
+ 			includeantruntime="false"/>
+ 		
+ <!--
+@@ -38,13 +40,22 @@
+ 		 put the test classes into a build/junit directory
+ 		 keep in mind to include the target.classes and the junit lib into classpath
+ 	-->
+-<!--	 <javac srcdir="${basedir}/test"
++		<echo message ="Compiling test..." />
++		<path id="path.test">
++			 <pathelement location="libs/junit-4.11.jar" />
++			<pathelement location="$libs/org.hamcrest.core_1.3.0.v201303031735.jar" />
++			<pathelement location="${target.classes}" />
++						</path>
++	 <javac srcdir="${test}"
+ 	 	destdir="${target.junit}"
+-		 includeantruntime="false"/> -->
++		 includeantruntime="false">
++		<classpath refid ="path.test" />
++	 	</javac>
+ </target>
+ 
+ <target name="jar" depends="compile">
+ <!-- check what is needed to create a JAR-Archive -->
++	<echo message ="Creating jar..." />
+ 		<jar jarFile="${target.jar}/HelloWorld.jar" >
+ 			<fileset dir="${target.classes}" />
+ 				 <manifest>
+@@ -57,7 +68,7 @@
+ <!-- run the Java program within your jar-archive
+ 		 log its output to output.txt
+  -->
+-		
++	<echo message="Trying to run the application!" />
+  	<java jar="${target.jar}/HelloWorld.jar" fork="true" output="${target}/output.txt"/>
+ 	</target>
+ </project>
+\ No newline at end of file
+diff --git a/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java b/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
+index ce0b903..cf4274b 100644
+--- a/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
++++ b/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
+@@ -1,10 +1,12 @@
+ package at.fhj.swd.konfmana;
+ 
+-import static org.junit.Assert.*;
+-
+ import org.junit.Before;
+ import org.junit.Test;
+ 
++import static org.junit.Assert.*;
++
++
++
+ import at.fhj.swd.konfmana.HelloWorld;
+ 
+ public class HelloWorldTest {
+@@ -18,29 +20,40 @@ public class HelloWorldTest {
+ 	
+ 	@Test
+ 	public void testConstructor(){
+-		hw = new HelloWorld("test");
+-        assertNotNull(hw);
+-
++		try {
++			hw = new HelloWorld("Lucky Luke");
++			assertNotNull(hw);
++		}
++		catch (AssertionError e) {
++				fail("testConstructor failed...");
++		}
+ 	}
+ 	
+ 	@Test
+ 	public void testGetName() {
+-		 hw = new HelloWorld();
+-         assertNull(hw.getName());
+-
+-         hw = new HelloWorld("Lucky Luke");
+-         assertEquals(hw.getName(), "Lucky Luke");
+-         hw = new HelloWorld(null);
+-         assertEquals(hw.getName(), null);
++		try {
++			hw = new HelloWorld();
++			assertNull(hw.getName());
++			hw = new HelloWorld("King Kong");
++			assertNotNull(hw.getName());
++			assertEquals(hw.getName(), "King Kong");
++		}
++		catch (AssertionError e) {
++				fail("testGetName failed...");
++		}
+ 	}
+ 
+ 	@Test
+ 	public void testSetName() {
+-		hw = new HelloWorld("test");
+-        assertEquals(hw.getName(), "test");
+-        hw.setName("King Kong");
+-
+-        assertEquals(hw.getName(), "King Kong");
++		try {
++			hw = new HelloWorld("Minnie Mouse");
++			assertEquals(hw.getName(), "Minnie Mouse");
++			hw.setName("Peter Pan");
++			assertEquals(hw.getName(), "Peter Pan");
++		}
++		catch (AssertionError e) {
++			fail("testSetName failed...");
++		}
+ 	}
+ 
+ 	public void testToString() {
+
+commit 32689068e3e24f28339d66b1ec315d96f07db09b
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Thu May 19 18:11:08 2016 +0200
+
+    ...
+
+diff --git a/ue03_ramplerk15/build.xml b/ue03_ramplerk15/build.xml
+index cca8e6a..2986ca2 100644
+--- a/ue03_ramplerk15/build.xml
++++ b/ue03_ramplerk15/build.xml
+@@ -29,17 +29,21 @@
+ 
+ 	<target name="compile" >
+ <!-- mind the dependency of each target - is it dependend on another target? -->
+-		<javac srcdir="src" destdir ="build/classes" includeantruntime="true"/>
++		<javac srcdir="src"
++			destdir ="build/classes"
++			includeantruntime="false"/>
+ 		
+ <!--
+ 		 also compile the test code
+ 		 put the test classes into a build/junit directory
+ 		 keep in mind to include the target.classes and the junit lib into classpath
+ 	-->
+-	<!-- <javac srcdir="${basedir}/test" destdir="${target.junit}" includeantruntime="true"/> -->
++<!--	 <javac srcdir="${basedir}/test"
++	 	destdir="${target.junit}"
++		 includeantruntime="false"/> -->
+ </target>
+ 
+-	<target name="jar" depends="compile">
++<target name="jar" depends="compile">
+ <!-- check what is needed to create a JAR-Archive -->
+ 		<jar jarFile="${target.jar}/HelloWorld.jar" >
+ 			<fileset dir="${target.classes}" />
+@@ -47,15 +51,13 @@
+ 				   <attribute name="Main-Class" value="at.fhj.swd.konfmana.HelloWorldMain" />
+ 				</manifest>
+ 		</jar>
+-	</target>
++</target>
+ 
+-	<target name="run" depends="jar">
+-		<echo message="Trying to run the application!" />
++<target name="run" depends="jar">
+ <!-- run the Java program within your jar-archive
+ 		 log its output to output.txt
+  -->
+ 		
+- <java jar="${target.jar}/HelloWorld.jar" fork="true" output="${target}/output.txt"/>
+-		
++ 	<java jar="${target.jar}/HelloWorld.jar" fork="true" output="${target}/output.txt"/>
+ 	</target>
+ </project>
+\ No newline at end of file
+
+commit 48fba68cde7edbfa3f8657a7ed1c12923986ce65
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Mon May 16 18:54:31 2016 +0200
+
+    jar
+
+diff --git a/ue03_ramplerk15/${target.jar}/HelloWorld.jar b/ue03_ramplerk15/${target.jar}/HelloWorld.jar
+new file mode 100644
+index 0000000..cfe1f48
+Binary files /dev/null and b/ue03_ramplerk15/${target.jar}/HelloWorld.jar differ
+diff --git a/ue03_ramplerk15/build.xml b/ue03_ramplerk15/build.xml
+index e48552b..cca8e6a 100644
+--- a/ue03_ramplerk15/build.xml
++++ b/ue03_ramplerk15/build.xml
+@@ -1,75 +1,61 @@
+ <?xml version="1.0" encoding="ISO-8859-1"?>
+ <project name="ue03 automatic builds with ANT">
+ 
+-	<!-- Properties -->
++<!-- Properties -->
+ 	<property name="src" value="${source}/src" />
+-
+-	       <property name="target" value="${source}/build" />
+-
+-	       <property name="target.classes" value="${target}/classes" />
+-
+-	       <property name="target.jar" value="${target}/jar" />
+-
+-	       <property name="target.junit" value="${target}/junit" />
+-
+-	       <property name="test" value="test" />
+-
+-	       <property name="libs" value="libs" />
++	<property name="target" value="${source}/build" />
++    <property name="target.classes" value="${target}/classes" />
++    <property name="target.jar" value="${target}/jar" />
++    <property name="target.junit" value="${target}/junit" />
++    <property name="test" value="test" />
++    <property name="libs" value="libs" /> 
+ 	
+ 	<target name="clean">
+-		<!--
+-		delete all artefacts (files and directories) you create during this build
+-		-->
+-		<delete dir = "${target}" />
+-		
++<!-- delete all artefacts (files and directories) you create during this build -->
++		<delete includeemptydirs="true" quiet="true">
++			<fileset dir="${target}" />
++		</delete>
++		<!-- delete dir = "${target}" /-->
+ 	</target>
+ 
+ 	<target name="prepare" depends="clean">
+-			<!--
+-			create every directory you need
+-			-->
+-		
++<!-- create every directory you need -->
++		<mkdir dir="build"/>
++		<mkdir dir="src"/>
+ 		<mkdir dir ="build/classes" />
+ 		<mkdir dir = "build/jar"  />
+ 		<mkdir dir = "build/junit" />
+  	</target>
+ 
+ 	<target name="compile" >
+-		<!--
+-		 mind the dependency of each target
+-		 is it dependend on another target?
+-		 -->
++<!-- mind the dependency of each target - is it dependend on another target? -->
+ 		<javac srcdir="src" destdir ="build/classes" includeantruntime="true"/>
+ 		
+-		<!--
++<!--
+ 		 also compile the test code
+ 		 put the test classes into a build/junit directory
+ 		 keep in mind to include the target.classes and the junit lib into classpath
+-		-->
+-		
+-	</target>
++	-->
++	<!-- <javac srcdir="${basedir}/test" destdir="${target.junit}" includeantruntime="true"/> -->
++</target>
+ 
+ 	<target name="jar" depends="compile">
+-		<!--
+-		 check what is needed to create a JAR-Archive 
+-		-->
++<!-- check what is needed to create a JAR-Archive -->
+ 		<jar jarFile="${target.jar}/HelloWorld.jar" >
+-		<fileset dir="${target.classes}" />
+-			 <manifest>
++			<fileset dir="${target.classes}" />
++				 <manifest>
+ 				   <attribute name="Main-Class" value="at.fhj.swd.konfmana.HelloWorldMain" />
+-			</manifest>
+-
+-	 	</jar>
++				</manifest>
++		</jar>
+ 	</target>
+ 
+ 	<target name="run" depends="jar">
+ 		<echo message="Trying to run the application!" />
+-		<!--
+-		 run the Java program within your jar-archive
++<!-- run the Java program within your jar-archive
+ 		 log its output to output.txt
+-		 -->
+-		<java classpath = "${target}/classes"
+-		classname = "at.fhj.swd.konfmana.HelloWorldMain"
+-		fork = "true" />
++ -->
++		
++ <java jar="${target.jar}/HelloWorld.jar" fork="true" output="${target}/output.txt"/>
++		
+ 	</target>
+ </project>
+\ No newline at end of file
+
+commit 8885a7a3e4c4a9a507225b0b623d667c0ed1a163
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Mon May 16 18:18:08 2016 +0200
+
+    ant 2.0
+
+diff --git a/ue03_ramplerk15/build.xml b/ue03_ramplerk15/build.xml
+index cb2a912..e48552b 100644
+--- a/ue03_ramplerk15/build.xml
++++ b/ue03_ramplerk15/build.xml
+@@ -53,19 +53,13 @@
+ 		<!--
+ 		 check what is needed to create a JAR-Archive 
+ 		-->
+-		<jar destfile="${target.jar}/HelloWorld.jar" >
+-
+-		                <fileset dir="${target.classes}" />
+-
+-		                     <manifest>
+-
+-		                           <attribute name="Main-Class" value="at.fhj.swd.konfmana.HelloWorldMain" />
+-
+-		                     </manifest>
+-
+-		                     </jar>
+-
++		<jar jarFile="${target.jar}/HelloWorld.jar" >
++		<fileset dir="${target.classes}" />
++			 <manifest>
++				   <attribute name="Main-Class" value="at.fhj.swd.konfmana.HelloWorldMain" />
++			</manifest>
+ 
++	 	</jar>
+ 	</target>
+ 
+ 	<target name="run" depends="jar">
+
+commit a108c94efd0c2bf067207a0310cab4dcf406ba80
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Mon May 16 18:08:33 2016 +0200
+
+    properties
+
+diff --git a/ue03_ramplerk15/build.xml b/ue03_ramplerk15/build.xml
+index 41e68ce..cb2a912 100644
+--- a/ue03_ramplerk15/build.xml
++++ b/ue03_ramplerk15/build.xml
+@@ -1,22 +1,38 @@
+ <?xml version="1.0" encoding="ISO-8859-1"?>
+ <project name="ue03 automatic builds with ANT">
++
++	<!-- Properties -->
++	<property name="src" value="${source}/src" />
++
++	       <property name="target" value="${source}/build" />
++
++	       <property name="target.classes" value="${target}/classes" />
++
++	       <property name="target.jar" value="${target}/jar" />
++
++	       <property name="target.junit" value="${target}/junit" />
++
++	       <property name="test" value="test" />
++
++	       <property name="libs" value="libs" />
+ 	
+ 	<target name="clean">
+ 		<!--
+ 		delete all artefacts (files and directories) you create during this build
+ 		-->
+ 		<delete dir = "${target}" />
++		
+ 	</target>
+ 
+ 	<target name="prepare" depends="clean">
+ 			<!--
+ 			create every directory you need
+ 			-->
+-		<mkdir dir="build"/>
+-		<mkdir dir ="src"/>
++		
+ 		<mkdir dir ="build/classes" />
+ 		<mkdir dir = "build/jar"  />
+-	</target>
++		<mkdir dir = "build/junit" />
++ 	</target>
+ 
+ 	<target name="compile" >
+ 		<!--
+@@ -30,14 +46,24 @@
+ 		 put the test classes into a build/junit directory
+ 		 keep in mind to include the target.classes and the junit lib into classpath
+ 		-->
+-	
++		
+ 	</target>
+ 
+ 	<target name="jar" depends="compile">
+ 		<!--
+ 		 check what is needed to create a JAR-Archive 
+ 		-->
+-		<fileset dir = "${target}/build/jar/HelloWorld.jar" basedir ="${target}/build/jar/classes"/>
++		<jar destfile="${target.jar}/HelloWorld.jar" >
++
++		                <fileset dir="${target.classes}" />
++
++		                     <manifest>
++
++		                           <attribute name="Main-Class" value="at.fhj.swd.konfmana.HelloWorldMain" />
++
++		                     </manifest>
++
++		                     </jar>
+ 
+ 
+ 	</target>
+
+commit 5b3b41e44673432b435d84f813f8136d4749d12c
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Mon May 16 17:53:48 2016 +0200
+
+    ant 2.0
+
+diff --git a/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class
+index 3eb6cc2..108cdcd 100644
+Binary files a/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class and b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class differ
+diff --git a/ue03_ramplerk15/build.xml b/ue03_ramplerk15/build.xml
+index 4def1ca..41e68ce 100644
+--- a/ue03_ramplerk15/build.xml
++++ b/ue03_ramplerk15/build.xml
+@@ -12,19 +12,18 @@
+ 			<!--
+ 			create every directory you need
+ 			-->
+-		
++		<mkdir dir="build"/>
++		<mkdir dir ="src"/>
+ 		<mkdir dir ="build/classes" />
+-		
+ 		<mkdir dir = "build/jar"  />
+ 	</target>
+ 
+-	
+ 	<target name="compile" >
+ 		<!--
+ 		 mind the dependency of each target
+-		 is it depoendend on another target?
++		 is it dependend on another target?
+ 		 -->
+-		<mkdir dir="${target.classes}" />
++		<javac srcdir="src" destdir ="build/classes" includeantruntime="true"/>
+ 		
+ 		<!--
+ 		 also compile the test code
+@@ -38,6 +37,9 @@
+ 		<!--
+ 		 check what is needed to create a JAR-Archive 
+ 		-->
++		<fileset dir = "${target}/build/jar/HelloWorld.jar" basedir ="${target}/build/jar/classes"/>
++
++
+ 	</target>
+ 
+ 	<target name="run" depends="jar">
+@@ -46,7 +48,7 @@
+ 		 run the Java program within your jar-archive
+ 		 log its output to output.txt
+ 		 -->
+-		<java classpath = "${target.junit}"
++		<java classpath = "${target}/classes"
+ 		classname = "at.fhj.swd.konfmana.HelloWorldMain"
+ 		fork = "true" />
+ 	</target>
+diff --git a/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java b/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
+index affcba5..ce0b903 100644
+--- a/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
++++ b/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
+@@ -18,20 +18,30 @@ public class HelloWorldTest {
+ 	
+ 	@Test
+ 	public void testConstructor(){
+-		
+-		
++		hw = new HelloWorld("test");
++        assertNotNull(hw);
++
+ 	}
+ 	
+ 	@Test
+ 	public void testGetName() {
+-		
++		 hw = new HelloWorld();
++         assertNull(hw.getName());
++
++         hw = new HelloWorld("Lucky Luke");
++         assertEquals(hw.getName(), "Lucky Luke");
++         hw = new HelloWorld(null);
++         assertEquals(hw.getName(), null);
+ 	}
+ 
+ 	@Test
+ 	public void testSetName() {
+-		
+-	}
++		hw = new HelloWorld("test");
++        assertEquals(hw.getName(), "test");
++        hw.setName("King Kong");
+ 
++        assertEquals(hw.getName(), "King Kong");
++	}
+ 
+ 	public void testToString() {
+ 		assertEquals("Hello World!", hw.toString());
+
+commit d72377485f0d0d1fe767c18d8821189b0bbef24b
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Mon May 16 16:36:21 2016 +0200
+
+    ant 1.0
+
+diff --git a/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class
+index c6c6a9a..3eb6cc2 100644
+Binary files a/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class and b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class differ
+diff --git a/ue03_ramplerk15/build.xml b/ue03_ramplerk15/build.xml
+index 8393b50..4def1ca 100644
+--- a/ue03_ramplerk15/build.xml
++++ b/ue03_ramplerk15/build.xml
+@@ -5,12 +5,17 @@
+ 		<!--
+ 		delete all artefacts (files and directories) you create during this build
+ 		-->
++		<delete dir = "${target}" />
+ 	</target>
+ 
+ 	<target name="prepare" depends="clean">
+ 			<!--
+ 			create every directory you need
+ 			-->
++		
++		<mkdir dir ="build/classes" />
++		
++		<mkdir dir = "build/jar"  />
+ 	</target>
+ 
+ 	
+@@ -41,5 +46,8 @@
+ 		 run the Java program within your jar-archive
+ 		 log its output to output.txt
+ 		 -->
++		<java classpath = "${target.junit}"
++		classname = "at.fhj.swd.konfmana.HelloWorldMain"
++		fork = "true" />
+ 	</target>
+ </project>
+\ No newline at end of file
+diff --git a/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java b/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
+index 5e5fcc3..affcba5 100644
+--- a/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
++++ b/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
+@@ -18,20 +18,17 @@ public class HelloWorldTest {
+ 	
+ 	@Test
+ 	public void testConstructor(){
+-		String test1 = "Lemonhead";
+-		String test2 = " ";
+-		String test3 = "Helmet";
+-		String test4 = null;
++		
++		
+ 	}
+ 	
+ 	@Test
+ 	public void testGetName() {
+-		fail("Not yet implemented!");
++		
+ 	}
+ 
+ 	@Test
+ 	public void testSetName() {
+-		fail("Not yet implemented!");
+ 		
+ 	}
+ 
+
+commit 4986f248d30a2c3295495e311e56fc58e67de96b
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Mon May 16 15:37:07 2016 +0200
+
+    rest1
+
+diff --git a/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class
+index 22b8845..c6c6a9a 100644
+Binary files a/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class and b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class differ
+
+commit 2256b56f3c85fd77e724e4dd23048456a9ddf96b
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Mon May 16 15:31:13 2016 +0200
+
+    test1
+
+diff --git a/ue03_ramplerk15/bin/.gitignore b/ue03_ramplerk15/bin/.gitignore
+deleted file mode 100644
+index 745f576..0000000
+--- a/ue03_ramplerk15/bin/.gitignore
++++ /dev/null
+@@ -1 +0,0 @@
+-/at/
+diff --git a/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorld.class b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorld.class
+new file mode 100644
+index 0000000..2aaeed4
+Binary files /dev/null and b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorld.class differ
+diff --git a/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldMain.class b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldMain.class
+new file mode 100644
+index 0000000..568337d
+Binary files /dev/null and b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldMain.class differ
+diff --git a/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class
+new file mode 100644
+index 0000000..22b8845
+Binary files /dev/null and b/ue03_ramplerk15/bin/at/fhj/swd/konfmana/HelloWorldTest.class differ
+
+commit 0164663fa46129e414cac02860325620c54ebdcf
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Mon May 16 15:29:09 2016 +0200
+
+    test1
+
+diff --git a/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java b/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
+index cad9ce9..5e5fcc3 100644
+--- a/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
++++ b/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
+@@ -18,7 +18,10 @@ public class HelloWorldTest {
+ 	
+ 	@Test
+ 	public void testConstructor(){
+-		fail("Not yet implemented!");
++		String test1 = "Lemonhead";
++		String test2 = " ";
++		String test3 = "Helmet";
++		String test4 = null;
+ 	}
+ 	
+ 	@Test
+
+commit 4040c35bf789b0daf8fae8b4d5eae08cad3af0c9
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Fri May 13 22:06:45 2016 +0200
+
+    getting started.. 1
+
+diff --git a/ue03_ramplerk15/.classpath b/ue03_ramplerk15/.classpath
+new file mode 100644
+index 0000000..1e3a3d4
+--- /dev/null
++++ b/ue03_ramplerk15/.classpath
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<classpath>
++	<classpathentry kind="src" path="src"/>
++	<classpathentry kind="src" path="test"/>
++	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
++	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
++	<classpathentry kind="output" path="bin"/>
++</classpath>
+diff --git a/ue03_ramplerk15/.project b/ue03_ramplerk15/.project
+new file mode 100644
+index 0000000..75bff36
+--- /dev/null
++++ b/ue03_ramplerk15/.project
+@@ -0,0 +1,17 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<projectDescription>
++	<name>ue03_ramplerk15</name>
++	<comment></comment>
++	<projects>
++	</projects>
++	<buildSpec>
++		<buildCommand>
++			<name>org.eclipse.jdt.core.javabuilder</name>
++			<arguments>
++			</arguments>
++		</buildCommand>
++	</buildSpec>
++	<natures>
++		<nature>org.eclipse.jdt.core.javanature</nature>
++	</natures>
++</projectDescription>
+diff --git a/ue03_ramplerk15/.settings/org.eclipse.jdt.core.prefs b/ue03_ramplerk15/.settings/org.eclipse.jdt.core.prefs
+new file mode 100644
+index 0000000..bb35fa0
+--- /dev/null
++++ b/ue03_ramplerk15/.settings/org.eclipse.jdt.core.prefs
+@@ -0,0 +1,11 @@
++eclipse.preferences.version=1
++org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
++org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.8
++org.eclipse.jdt.core.compiler.codegen.unusedLocal=preserve
++org.eclipse.jdt.core.compiler.compliance=1.8
++org.eclipse.jdt.core.compiler.debug.lineNumber=generate
++org.eclipse.jdt.core.compiler.debug.localVariable=generate
++org.eclipse.jdt.core.compiler.debug.sourceFile=generate
++org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
++org.eclipse.jdt.core.compiler.problem.enumIdentifier=error
++org.eclipse.jdt.core.compiler.source=1.8
+diff --git a/ue03_ramplerk15/bin/.gitignore b/ue03_ramplerk15/bin/.gitignore
+new file mode 100644
+index 0000000..745f576
+--- /dev/null
++++ b/ue03_ramplerk15/bin/.gitignore
+@@ -0,0 +1 @@
++/at/
+diff --git a/ue03_ramplerk15/build.xml b/ue03_ramplerk15/build.xml
+new file mode 100644
+index 0000000..8393b50
+--- /dev/null
++++ b/ue03_ramplerk15/build.xml
+@@ -0,0 +1,45 @@
++<?xml version="1.0" encoding="ISO-8859-1"?>
++<project name="ue03 automatic builds with ANT">
++	
++	<target name="clean">
++		<!--
++		delete all artefacts (files and directories) you create during this build
++		-->
++	</target>
++
++	<target name="prepare" depends="clean">
++			<!--
++			create every directory you need
++			-->
++	</target>
++
++	
++	<target name="compile" >
++		<!--
++		 mind the dependency of each target
++		 is it depoendend on another target?
++		 -->
++		<mkdir dir="${target.classes}" />
++		
++		<!--
++		 also compile the test code
++		 put the test classes into a build/junit directory
++		 keep in mind to include the target.classes and the junit lib into classpath
++		-->
++	
++	</target>
++
++	<target name="jar" depends="compile">
++		<!--
++		 check what is needed to create a JAR-Archive 
++		-->
++	</target>
++
++	<target name="run" depends="jar">
++		<echo message="Trying to run the application!" />
++		<!--
++		 run the Java program within your jar-archive
++		 log its output to output.txt
++		 -->
++	</target>
++</project>
+\ No newline at end of file
+diff --git a/ue03_ramplerk15/libs/junit-4.11.jar b/ue03_ramplerk15/libs/junit-4.11.jar
+new file mode 100644
+index 0000000..aaf7444
+Binary files /dev/null and b/ue03_ramplerk15/libs/junit-4.11.jar differ
+diff --git a/ue03_ramplerk15/libs/org.hamcrest.core_1.3.0.v201303031735.jar b/ue03_ramplerk15/libs/org.hamcrest.core_1.3.0.v201303031735.jar
+new file mode 100644
+index 0000000..52ab887
+Binary files /dev/null and b/ue03_ramplerk15/libs/org.hamcrest.core_1.3.0.v201303031735.jar differ
+diff --git a/ue03_ramplerk15/src/at/fhj/swd/konfmana/HelloWorld.java b/ue03_ramplerk15/src/at/fhj/swd/konfmana/HelloWorld.java
+new file mode 100644
+index 0000000..2fda219
+--- /dev/null
++++ b/ue03_ramplerk15/src/at/fhj/swd/konfmana/HelloWorld.java
+@@ -0,0 +1,37 @@
++package at.fhj.swd.konfmana;
++
++public class HelloWorld {
++
++	private String name=null;
++
++	public HelloWorld(String name){
++		setName(name);
++	}
++	
++	public HelloWorld(){
++		setName(null);
++	}
++	
++	public String getName() {
++		return name;
++	}
++
++	public void setName(String name) {
++		if (name!=null){
++			this.name = name.trim();
++		} else {
++			this.name = null;
++		}
++	}
++	
++	@Override
++	public String toString(){
++		if (name==null||name.isEmpty()){
++			return "Hello World!";
++		} else {
++			return "Hello World! Hello "+name+"!";
++		}
++		
++	}
++	
++}
+diff --git a/ue03_ramplerk15/src/at/fhj/swd/konfmana/HelloWorldMain.java b/ue03_ramplerk15/src/at/fhj/swd/konfmana/HelloWorldMain.java
+new file mode 100644
+index 0000000..31e93e4
+--- /dev/null
++++ b/ue03_ramplerk15/src/at/fhj/swd/konfmana/HelloWorldMain.java
+@@ -0,0 +1,17 @@
++package at.fhj.swd.konfmana;
++
++public class HelloWorldMain {
++
++	public static void main(String[] args) {
++		HelloWorld hw;
++		if(args.length > 0){
++			 hw = new HelloWorld(args[0]);
++		} else {
++			 hw = new HelloWorld();
++		}
++			
++		System.out.println(hw.toString());
++
++	}
++
++}
+
+commit 4f261d2215f63002701aea65c4dc88791ea8a2c1
+Author: ramplerk15 <kerstin.rampler@edu.fh-joanneum.at>
+Date:   Fri May 13 22:06:03 2016 +0200
+
+    getting started...
+
+diff --git a/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java b/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
+new file mode 100644
+index 0000000..cad9ce9
+--- /dev/null
++++ b/ue03_ramplerk15/test/at/fhj/swd/konfmana/HelloWorldTest.java
+@@ -0,0 +1,50 @@
++package at.fhj.swd.konfmana;
++
++import static org.junit.Assert.*;
++
++import org.junit.Before;
++import org.junit.Test;
++
++import at.fhj.swd.konfmana.HelloWorld;
++
++public class HelloWorldTest {
++
++	private HelloWorld hw;
++	
++	@Before
++	public void setup(){
++		hw = new HelloWorld();
++	}
++	
++	@Test
++	public void testConstructor(){
++		fail("Not yet implemented!");
++	}
++	
++	@Test
++	public void testGetName() {
++		fail("Not yet implemented!");
++	}
++
++	@Test
++	public void testSetName() {
++		fail("Not yet implemented!");
++		
++	}
++
++
++	public void testToString() {
++		assertEquals("Hello World!", hw.toString());
++		hw.setName("     ");
++		assertEquals("Hello World!", hw.toString());
++		hw.setName("   Lemonhead   ");
++		assertEquals("Hello World! Hello Lemonhead!", hw.toString());
++		hw.setName("");
++		assertEquals("Hello World!", hw.toString());
++		hw.setName(null);
++		assertEquals("Hello World!", hw.toString());
++		hw.setName("Helmet");
++		assertEquals("Hello World! Hello Helmet!", hw.toString());
++	}
++
++}

@@ -29,17 +29,21 @@
 
 	<target name="compile" >
 <!-- mind the dependency of each target - is it dependend on another target? -->
-		<javac srcdir="src" destdir ="build/classes" includeantruntime="true"/>
+		<javac srcdir="src"
+			destdir ="build/classes"
+			includeantruntime="false"/>
 		
 <!--
 		 also compile the test code
 		 put the test classes into a build/junit directory
 		 keep in mind to include the target.classes and the junit lib into classpath
 	-->
-	<!-- <javac srcdir="${basedir}/test" destdir="${target.junit}" includeantruntime="true"/> -->
+<!--	 <javac srcdir="${basedir}/test"
+	 	destdir="${target.junit}"
+		 includeantruntime="false"/> -->
 </target>
 
-	<target name="jar" depends="compile">
+<target name="jar" depends="compile">
 <!-- check what is needed to create a JAR-Archive -->
 		<jar jarFile="${target.jar}/HelloWorld.jar" >
 			<fileset dir="${target.classes}" />
@@ -47,15 +51,13 @@
 				   <attribute name="Main-Class" value="at.fhj.swd.konfmana.HelloWorldMain" />
 				</manifest>
 		</jar>
-	</target>
+</target>
 
-	<target name="run" depends="jar">
-		<echo message="Trying to run the application!" />
+<target name="run" depends="jar">
 <!-- run the Java program within your jar-archive
 		 log its output to output.txt
  -->
 		
- <java jar="${target.jar}/HelloWorld.jar" fork="true" output="${target}/output.txt"/>
-		
+ 	<java jar="${target.jar}/HelloWorld.jar" fork="true" output="${target}/output.txt"/>
 	</target>
 </project>

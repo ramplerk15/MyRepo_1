@@ -2,8 +2,8 @@
 <project name="ue03 automatic builds with ANT">
 
 <!-- Properties -->
-	<property name="src" value="${source}/src" />
-	<property name="target" value="${source}/build" />
+	<property name="src" value="src" />
+	<property name="target" value="build" />
     <property name="target.classes" value="${target}/classes" />
     <property name="target.jar" value="${target}/jar" />
     <property name="target.junit" value="${target}/junit" />
@@ -31,7 +31,7 @@
 	<target name="compile" >
 <!-- mind the dependency of each target - is it dependend on another target? -->
 		<echo message ="Compiling..." />
-		<javac srcdir="src"
+		<javac srcdir="${src}"
 			destdir ="${target.classes}"
 			includeantruntime="false"/>
 		
@@ -50,7 +50,7 @@
 	 	destdir="${target.junit}"
 		 includeantruntime="false">
 		<classpath refid ="path.test" />
-	 	</javac>
+	 </javac>
 </target>
 
 <target name="jar" depends="compile">
@@ -58,9 +58,9 @@
 	<echo message ="Creating jar..." />
 		<jar jarFile="${target.jar}/HelloWorld.jar" >
 			<fileset dir="${target.classes}" />
-				 <manifest>
-				   <attribute name="Main-Class" value="at.fhj.swd.konfmana.HelloWorldMain" />
-				</manifest>
+			 <manifest>
+				  <attribute name="Main-Class" value="at.fhj.swd.konfmana.HelloWorldMain" />
+			</manifest>
 		</jar>
 </target>
 
